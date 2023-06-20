@@ -4,10 +4,10 @@
 error_reporting(E_ALL);
 
 // Mulai sesi
-session_start();
+//session_start();
 
 // Url -
-define("URL", "http://localhost/si-mvc");
+define("URL", "http://localhost/tugas2-pbwl");
 define("AST", URL . "/layouts/assets");
 
 // Path root

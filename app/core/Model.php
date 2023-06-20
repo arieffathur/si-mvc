@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use mysqli;
 use PDO;
 
 class Model
@@ -14,9 +15,38 @@ class Model
 
 		try {
 
-			$this->db = new PDO("mysql:host=localhost;dbname=dbecommerce", "root", "");
+			$this->db = new PDO("mysql:host=localhost;dbname=dbtugas2", "root", "");
 		} catch (Exception $e) {
 			die("error! " . $e->getMessage());
 		}
+	}
+
+	public function resultSet($stmt)
+    {
+		$data = [];
+
+		while ($rows = $stmt->fetch()) {
+			$data[] = $rows;
+		}
+
+		return $data;
+	}
+
+	public function select($stmt)
+	{
+		//Menampilkan satu data
+		return $stmt->fetch();
+	}
+
+	public function selects($stmt)
+	{
+		//Menampilkan semua data
+		$data = [];
+
+		while ($rows = $stmt->fetch()) {
+			$data[] = $rows;
+		}
+
+		return $data;
 	}
 }

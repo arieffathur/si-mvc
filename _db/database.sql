@@ -1,10 +1,11 @@
-CREATE TABLE tb_kategori (
-	kat_id TINYINT(3) NOT NULL AUTO_INCREMENT,
-	kat_nama VARCHAR(50) NOT NULL,
-	kat_keterangan TEXT DEFAULT NULL,
+CREATE TABLE tb_golongan (
+	gol_id TINYINT(3) NOT NULL AUTO_INCREMENT,
+	gol_kode VARCHAR(10) NOT NULL,
+	gol_nama VARCHAR(50) NOT NULL,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT NULL,
-	PRIMARY KEY(kat_id)
+	PRIMARY KEY(gol_id),
+	UNIQUE KEY(gol_kode)
 );
 
 CREATE TABLE tb_users (
@@ -23,56 +24,29 @@ CREATE TABLE tb_users (
 	UNIQUE KEY(user_email)
 );
 
-CREATE TABLE tb_produk (
-	produk_id INT(11) NOT NULL AUTO_INCREMENT,
-	produk_id_kat TINYINT(3) NOT NULL,
-	produk_id_user INT(11) NOT NULL,
-	produk_kode VARCHAR(50) NOT NULL,
-	produk_nama VARCHAR(256) NOT NULL,
-	produk_hrg DOUBLE DEFAULT '0',
-	produk_keterangan TEXT DEFAULT NULL,
-	produk_stock INT(11) DEFAULT '0',
-	produk_photo VARCHAR(100) DEFAULT NULL,
+CREATE TABLE tb_pelanggan (
+	pel_id INT(11) NOT NULL AUTO_INCREMENT,
+	pel_id_gol TINYINT(3) NOT NULL,
+	pel_id_user INT(11) NOT NULL,
+	pel_no VARCHAR(20) NOT NULL,
+	pel_nama VARCHAR(50) NOT NULL,
+	pel_alamat TEXT NOT NULL,
+	pel_hp VARCHAR(20) NOT NULL,
+	pel_ktp VARCHAR(50) DEFAULT NULL,
+	pel_seri  VARCHAR(50) DEFAULT NULL,
+	pel_meteran INT(11) DEFAULT NULL,
+	pel_aktif ENUM ("Y","N") DEFAULT NULL,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT NULL,
-	PRIMARY KEY(produk_id),
-	UNIQUE KEY(produk_kode),
-	FOREIGN KEY(produk_id_kat) REFERENCES tb_kategori(kat_id) ON UPDATE CASCADE ON DELETE RESTRICT,
-	FOREIGN KEY(produk_id_user) REFERENCES tb_users(user_id) ON UPDATE CASCADE ON DELETE RESTRICT
+	PRIMARY KEY(pel_id),
+	UNIQUE KEY(pel_no),
+	FOREIGN KEY(pel_id_gol) REFERENCES tb_golongan(gol_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+	FOREIGN KEY(pel_id_user) REFERENCES tb_users(user_id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
-
-CREATE TABLE tb_keranjang (
-	ker_id INT(11) NOT NULL AUTO_INCREMENT,
-	ker_id_user INT(11) NOT NULL,
-	ker_id_produk INT(11) NOT NULL,
-	ker_harga DOUBLE,
-	ker_jml INT(11),
-	PRIMARY KEY(ker_id),
-	FOREIGN KEY(ker_id_user) REFERENCES tb_users(user_id) ON UPDATE CASCADE ON DELETE RESTRICT,
-	FOREIGN KEY(ker_id_produk) REFERENCES tb_produk(produk_id) ON UPDATE CASCADE ON DELETE RESTRICT
-);
-
-CREATE TABLE tb_order (
-	order_id INT(11) NOT NULL AUTO_INCREMENT,
-	order_id_user INT(11) NOT NULL,
-	order_tgl TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	order_kode VARCHAR(50) NOT NULL,
-	order_ttl DOUBLE,
-	order_kurir VARCHAR(100),
-	order_ongkir INT(11) DEFAULT '0',
-	order_byr_deadline DATETIME,
-	order_batal TINYINT(1),
-	updated_at DATETIME DEFAULT NULL,
-	PRIMARY KEY(order_id),
-	UNIQUE KEY(order_kode),
-	FOREIGN KEY(order_id_user) REFERENCES tb_users(user_id) ON UPDATE CASCADE ON DELETE RESTRICT
-);
-
-CREATE TABLE tb_order_detail (
-	detail_id_order INT(11) NOT NULL,
-	detail_id_produk INT(11) NOT NULL,
-	detail_harga DOUBLE,
-	detail_jml INT(11),
-	FOREIGN KEY(detail_id_order) REFERENCES tb_order(order_id) ON UPDATE CASCADE ON DELETE RESTRICT,
-	FOREIGN KEY(detail_id_produk) REFERENCES tb_produk(produk_id) ON UPDATE CASCADE ON DELETE RESTRICT	
+CREATE TABLE tb_admin (
+    admin_id INT(11) NOT NULL AUTO_INCREMENT,
+    admin_name VARCHAR(50),
+    username VARCHAR(50),
+    password VARCHAR(100),
+    PRIMARY KEY (admin_id)
 );
